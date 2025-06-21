@@ -360,3 +360,7 @@ overlay.addEventListener('click', () => {
     });
     overlay.classList.add('hidden');
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadContacts();
+});
