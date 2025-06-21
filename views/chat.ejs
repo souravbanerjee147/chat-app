@@ -20,205 +20,233 @@
 
     <% if (!user || !user.username) { %>
         <script>window.location.href = "/";</script>
-        <% } %>
+    <% } %>
 
-            <!-- Mini Sidebar -->
-            <div class="mini-sidebar">
-                <div class="top-icons">
-                    <img src="stufs/box-archive-solid.svg" alt="Archive" title="Archive" class="sidebar-icon" />
-                </div>
+    <!-- Mini Sidebar -->
+    <div class="mini-sidebar">
+        <div class="top-icons">
+            <img src="stufs/box-archive-solid.svg" alt="Archive" title="Archive" class="sidebar-icon" />
+        </div>
 
-                <div class="top-icons">
-                    <img src="stufs/user-group-solid.svg" alt="Group" title="Group" class="sidebar-icon" />
-                </div>
-
-
-                <div class="top-icons">
-                    <img src="stufs/star-solid.svg" alt="Starred" title="Starred" class="sidebar-icon" />
-                </div>
-
-                <!-- send request -->
-                <div class="top-icons">
-                    <img src="stufs/plus-solid.svg" alt="New Chat" title="New Chat" class="sidebar-icon"
-                        id="plusIconSidebar" />
-                </div>
+        <div class="top-icons">
+            <img src="stufs/user-group-solid.svg" alt="Group" title="Group" class="sidebar-icon" />
+        </div>
 
 
-                <!-- request scction -->
-                <div class="top-icons">
-                    <div style="position: relative; display: inline-block;">
-                        <img src="stufs/bell-solid.svg" alt="Chat Requests" title="Chat Requests" class="sidebar-icon"
-                            id="chatRequestsBtn" />
-                        <span id="requestDot" class="dot hidden"></span>
-                    </div>
-                </div>
+        <div class="top-icons">
+            <img src="stufs/star-solid.svg" alt="Starred" title="Starred" class="sidebar-icon" />
+        </div>
+
+        <!-- send request -->
+        <div class="top-icons">
+            <img src="stufs/plus-solid.svg" alt="New Chat" title="New Chat" class="sidebar-icon"
+                id="plusIconSidebar" />
+        </div>
 
 
-                <!-- setting button -->
-                <div class="bottom-icon">
-                    <img src="stufs/gear-solid.svg" alt="Settings" title="Settings" class="sidebar-icon"
-                        onclick="openSettingsPopup()" />
-                </div>
-
+        <!-- request scction -->
+        <div class="top-icons">
+            <div style="position: relative; display: inline-block;">
+                <img src="stufs/bell-solid.svg" alt="Chat Requests" title="Chat Requests" class="sidebar-icon"
+                    id="chatRequestsBtn" />
+                <span id="requestDot" class="dot hidden"></span>
             </div>
-
-            <!-- Sidebar -->
-            <div class="sidebar">
-                <div class="sidebar-header">ChatApp</div>
-
-                <div class="search-box">
-                    <input type="text" placeholder="Search or start new chat" id="searchInput"
-                        oninput="filterContacts()" />
-                </div>
-
-                <div class="contacts-list" id="contactsList">
-                    <!-- Contacts will be dynamically added here -->
-                </div>
-            </div>
-
-            <!-- Chat Area -->
-            <div class="chat-window">
-                <div class="chat-header" id="chatHeader">
-                    <img src="https://i.pravatar.cc/50" alt="Chat Avatar" id="chatAvatar" />
-                    <div class="chat-name" id="chatName">Select a chat</div>
-                </div>
-
-                <div class="chat-messages" id="chatMessages">
-                    <p style="text-align:center; color:#555; margin-top: 40px;">No chat selected</p>
-                </div>
-
-                <form class="chat-input" id="chatForm" style="display:none;">
-                    <div class="attachment-menu-container">
-                        <button type="button" class="attachment-btn" onclick="toggleAttachmentMenu(event)">+</button>
-                        <div class="attachment-menu hidden" id="attachmentMenu">
-                            <div onclick="alert('Attach Document')" style="color: black;">📄 Document</div>
-                            <div onclick="alert('Attach Photo/Video')" style="color: black;">🖼️ Photo/Video</div>
-                            <div onclick="alert('Share Live Location')" style="color: black;">📍 Live Location</div>
-                        </div>
-                    </div>
-                    <textarea id="messageInput" rows="1" placeholder="Type a message..."></textarea>
-                    <button type="submit">Send</button>
-                </form>
-            </div>
-
-            <!-- Settings Popup -->
-            <div class="popup hidden" id="settingsPopup">
-                <div id="mainSettings">
-                    <h3>Settings</h3>
-                    <button onclick="showProfile()">Profile</button>
-                    <button onclick="showPrivacy()">Privacy</button>
-                    <button onclick="openLogoutPopup()">Logout</button>
-                    <button onclick="closePopup(event)">Close</button>
-                </div>
-                <div id="profileSection" class="hidden">
-                    <h3>Profile</h3>
-                    <button onclick="goBackToSettings()">Back</button>
-                </div>
-                <div id="privacySection" class="hidden">
-                    <h3>Privacy</h3>
-                    <button onclick="goBackToSettings()">Back</button>
-                </div>
-
-                <div id="logoutSection" class="hidden">
-                    <h3>logout</h3>
-                    <button onclick="confirmLogout()">Confirm</button>
-                    <button onclick="closeLogoutPopup()">Cancel</button>
-                </div>
-
-            </div>
+        </div>
 
 
-            <!-- Send Request Popup Panel -->
-            <div id="chatRequestPopup" class="popup hidden">
-                <div class="popup-content">
-                    <h3>Start a New Chat</h3>
-                    <input type="text" id="targetUsername" placeholder="Enter username" />
-                    <div id="requestStatusMessage" class="request-message"></div>
-                    <div class="popup-buttons" style="display: flex; justify-content: space-between;">
-                        <button id="sendRequestBtn">Send</button>
-                        <button id="cancelRequestBtn">Cancel</button>
-                    </div>
+        <!-- setting button -->
+        <div class="bottom-icon">
+            <img src="stufs/gear-solid.svg" alt="Settings" title="Settings" class="sidebar-icon"
+                onclick="openSettingsPopup()" />
+        </div>
+
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">ChatApp</div>
+
+        <div class="search-box">
+            <input type="text" placeholder="Search or start new chat" id="searchInput"
+                oninput="filterContacts()" />
+        </div>
+
+        <div class="contacts-list" id="contactsList">
+            <!-- Contacts will be dynamically added here -->
+        </div>
+    </div>
+
+    <!-- Chat Area -->
+    <div class="chat-window">
+        <div class="chat-header" id="chatHeader">
+            <img src="https://i.pravatar.cc/50" alt="Chat Avatar" id="chatAvatar" />
+            <div class="chat-name" id="chatName">Select a chat</div>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+            <p style="text-align:center; color:#555; margin-top: 40px;">No chat selected</p>
+            
+        </div>
+
+        <form class="chat-input" id="chatForm" style="display:none;">
+            <div class="attachment-menu-container">
+                <button type="button" class="attachment-btn" onclick="toggleAttachmentMenu(event)">+</button>
+                <div class="attachment-menu hidden" id="attachmentMenu">
+                    <div onclick="alert('Attach Document')" style="color: black;">📄 Document</div>
+                    <div onclick="alert('Attach Photo/Video')" style="color: black;">🖼️ Photo/Video</div>
+                    <div onclick="alert('Share Live Location')" style="color: black;">📍 Live Location</div>
                 </div>
             </div>
+            <textarea id="messageInput" rows="1" placeholder="Type a message..."></textarea>
+            <button type="submit" id="sendButton">Send</button>
+        </form>
+    </div>
+
+    <!-- Settings Popup -->
+    <div class="popup hidden" id="settingsPopup">
+        <div id="mainSettings">
+            <h3>Settings</h3>
+            <button onclick="showProfile()">Profile</button>
+            <button onclick="showPrivacy()">Privacy</button>
+            <button onclick="openLogoutPopup()">Logout</button>
+            <button onclick="closePopup(event)">Close</button>
+        </div>
+        <div id="profileSection" class="hidden">
+            <h3>Profile</h3>
+            <button onclick="goBackToSettings()">Back</button>
+        </div>
+        <div id="privacySection" class="hidden">
+            <h3>Privacy</h3>
+            <button onclick="goBackToSettings()">Back</button>
+        </div>
+
+        <div id="logoutSection" class="hidden">
+            <h3>logout</h3>
+            <button onclick="confirmLogout()">Confirm</button>
+            <button onclick="closeLogoutPopup()">Cancel</button>
+        </div>
+
+    </div>
 
 
-
-            <!-- Logout Confirmation Popup -->
-            <div id="logoutPopup" class="popup hidden">
-                <div class="popup-content">
-                    <p>Are you sure you want to logout?</p>
-                    <button id="confirmLogoutBtn">Yes</button>
-                    <button id="cancelLogoutBtn">Cancel</button>
-                </div>
+    <!-- Send Request Popup Panel -->
+    <div id="chatRequestPopup" class="popup hidden">
+        <div class="popup-content">
+            <h3>Start a New Chat</h3>
+            <input type="text" id="targetUsername" placeholder="Enter username" />
+            <div id="requestStatusMessage" class="request-message"></div>
+            <div class="popup-buttons" style="display: flex; justify-content: space-between;">
+                <button id="sendRequestBtn">Send</button>
+                <button id="cancelRequestBtn">Cancel</button>
             </div>
+        </div>
+    </div>
+
+
+
+    <!-- Logout Confirmation Popup -->
+    <div id="logoutPopup" class="popup hidden">
+        <div class="popup-content">
+            <p>Are you sure you want to logout?</p>
+            <button id="confirmLogoutBtn">Yes</button>
+            <button id="cancelLogoutBtn">Cancel</button>
+        </div>
+    </div>
 
 
 
 
 
-            <!-- Request Popup Panel -->
+    <!-- Request Popup Panel -->
 
-            <div id="requestPopup" class="popup hidden">
-                <h3>Chat Requests</h3>
-                <div id="requestList">
-                    <% if (pendingRequests && pendingRequests.length===0) { %>
-                        <p style="text-align:center; color:#ccc;">No Requests</p>
-                    <% } else { %>
-                        <% pendingRequests.forEach(function(req) { %>
-                            <div class="request-item">
-                                <img src="<%= req.avatar %>" class="avatar" />
-                                <div class="request-info">
-                                    <div class="info-top">
-                                        <div class="request-username">
-                                            <%= req.username %>
-                                        </div>
-                                        <div class="request-actions">
-                                            <button class="accept-btn" data-id="<%= req.request_id %>">Accept</button>
-                                            <button class="reject-btn" data-id="<%= req.request_id %>">Reject</button>
-                                        </div>
+    <div id="requestPopup" class="popup hidden">
+        <h3>Chat Requests</h3>
+        <div id="requestList">
+            <% if (pendingRequests && pendingRequests.length===0) { %>
+                <p style="text-align:center; color:#ccc;">No Requests</p>
+                <% } else { %>
+                    <% pendingRequests.forEach(function(req) { %>
+                        <div class="request-item">
+                            <img src="<%= req.avatar %>" class="avatar" />
+                            <div class="request-info">
+                                <div class="info-top">
+                                    <div class="request-username">
+                                        <%= req.username %>
                                     </div>
-                                    <div class="request-fullname">
-                                        <%= req.full_name %>
+                                    <div class="request-actions">
+                                        <button class="accept-btn"
+                                            data-id="<%= req.request_id %>">Accept</button>
+                                        <button class="reject-btn"
+                                            data-id="<%= req.request_id %>">Reject</button>
                                     </div>
                                 </div>
+                                <div class="request-fullname">
+                                    <%= req.full_name %>
+                                </div>
                             </div>
-                        <% }); %>
-                    <% } %>
-                </div>
-                <button onclick="closePopup({ target: document.getElementById('requestPopup') })" class="close-btn">
-                    Close
-                </button>
-            </div>
+                        </div>
+                    <% }); %>
+                <% } %>
+        </div>
+        <button onclick="closePopup({ target: document.getElementById('requestPopup') })" class="close-btn">
+            Close
+        </button>
+    </div>
 
 
 
-            <!-- Red Dot for New Requests -->
-            <!-- <span id="requestDot" class="notification-dot hidden"></span> -->
+    <!-- Red Dot for New Requests -->
+    <!-- <span id="requestDot" class="notification-dot hidden"></span> -->
 
 
+    <!-- Overlay -->
+    <div id="overlay" class="hidden"></div>
+            
+            
+<script>
+    window.addEventListener("pageshow", function (event) {
+        if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
+            window.location.href = "/";
+        }
+    });
+</script>
 
+ <script src="/socket.io/socket.io.js"></script>
 
-            <!-- Overlay -->
-            <div id="overlay" class="hidden"></div>
+<script>
+    const user_id = "<%= user.id %>";  // This sets user_id for use in script.js
+    console.log("Current logged-in user ID is:", user_id);
+</script>
 
+<script src="/script.js"></script>
+            
+<script>
+  socket.on('connect', () => {
+    console.log('Socket connected');
+  });
 
-            <script>
-                const user_id = "<%= user.id %>"; // This sets user_id for use in script.js
-                console.log("Current logged-in user ID is:", user_id);
-            </script>
-
-
-            <!-- External Script -->
-            <script src="/script.js"></script>
-
-            <script>
-                window.addEventListener("pageshow", function (event) {
-                    if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
-                        window.location.href = "/";
-                    }
-                });
-            </script>
-
+  // Listen for incoming messages
+  socket.on('new_message', (msg) => {
+    if (msg.chatId == currentChatId) {
+      const msgDiv = document.createElement('div');
+      msgDiv.style.display = 'flex';
+      msgDiv.style.justifyContent = msg.senderId === user_id ? 'flex-end' : 'flex-start';
+      msgDiv.innerHTML = `
+        <div style="
+          max-width: 70%;
+          background: ${msg.senderId === user_id ? '#00ffc8' : '#e0e0e0'};
+          color: #121212;
+          padding: 8px 12px;
+          border-radius: 15px;
+          margin: 4px 0;
+          word-wrap: break-word;
+          display: inline-block;
+        ">${msg.text}</div>`;
+      chatMessages.appendChild(msgDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+  });
+</script>
 
 
 </body>
