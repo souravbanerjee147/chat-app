@@ -302,6 +302,45 @@ async function handleRequestResponse(requestId, action) {
     }
 }
 
+async function openChat(chatId) {
+    console.log("Opening chat with ID:", chatId);
+    currentChatId = chatId;
+
+    // Show message form when chat is opened
+    document.getElementById('chatForm').style.display = 'flex';
+
+    try {
+        const response = await fetch(`/chat/messages/${chatId}`);
+        if (!response.ok) throw new Error('Failed to load messages');
+
+        const messages = await response.json();
+        console.log("Messages received:", messages);
+
+        const chatMessages = document.getElementById('chatMessages');
+        chatMessages.innerHTML = ''; // Clear previous messages
+
+        if (messages.length === 0) {
+            chatMessages.innerHTML = '<p style="text-align:center; color:#555; margin-top: 40px;">No messages yet</p>';
+        } else {
+            messages.forEach(msg => {
+                const msgDiv = document.createElement('div');
+                msgDiv.innerHTML = `
+                    <div style="margin:5px 0; padding:8px 12px; border-radius:8px; background:${msg.sender === 'you' ? '#00ffc8' : '#e0e0e0'}; color:${msg.sender === 'you' ? '#121212' : '#121212'}; text-align:${msg.sender === 'you' ? 'right' : 'left'};">
+                        ${msg.text}
+                    </div>`;
+                chatMessages.appendChild(msgDiv);
+            });
+        }
+
+        // Scroll to bottom
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    } catch (err) {
+        console.error('Failed to load messages:', err);
+        alert("Could not open chat. Try again.");
+    }
+}
+
 
 // ===== Load Contacts on Page Load =====
 async function loadContacts() {
