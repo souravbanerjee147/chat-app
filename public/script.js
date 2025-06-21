@@ -366,14 +366,14 @@ async function loadContacts() {
             li.addEventListener('click', () => {
                 openChat(contact.chatId);
 
-                // ✅ Optional: update the chat header too
+                // update the chat header too
                 document.getElementById('chatAvatar').src = contact.avatar;
                 document.getElementById('chatName').textContent = contact.fullname;
 
-                // ✅ Show the input form
+                // Show the input form
                 document.getElementById('chatForm').style.display = 'flex';
 
-                // ✅ Clear and focus the message input
+                // Clear and focus the message input
                 document.getElementById('messageInput').value = '';
                 document.getElementById('messageInput').focus();
             });
