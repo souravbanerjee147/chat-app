@@ -317,7 +317,10 @@ async function loadContacts() {
             li.innerHTML = `
                 <img src="${contact.avatar}" class="avatar" />
                 <div class="contact-info">
-                    <div class="username">${contact.username}</div>
+                    <div class="top-row">
+            <span class="name">${contact.fullname}</span>
+            <span class="time">${contact.lastMessageTime ? new Date(contact.lastMessageTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}</span>
+        </div>
                     <div class="last-message">${contact.lastMessage}</div>
                 </div>
             `;
