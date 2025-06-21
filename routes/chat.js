@@ -1,3 +1,5 @@
+
+
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
@@ -40,27 +42,50 @@ router.get('/', ensureAuthenticated, async (req, res) => {
 });
 
 
-// Get user contacts
-router.get('/contacts', ensureAuthenticated, async (req, res) => {
+router.get('/messages/:chatId', ensureAuthenticated, async (req, res) => {
+  const chatId = req.params.chatId;
   const userId = req.user.id;
 
   try {
-    // 🔍 Confirm: Does db.query return ONLY rows (not [rows, fields])?
-    const chats = await db.query(
-      `SELECT c.id AS chat_id, 
-              u.id AS user_id, u.username, u.fullname, u.avatar, 
-              m.text AS last_message, m.created_at AS last_message_time
-       FROM chats c
-       JOIN users u ON u.id = CASE WHEN c.user1_id = ? THEN c.user2_id ELSE c.user1_id END
-       LEFT JOIN messages m ON m.id = (
-         SELECT id FROM messages WHERE chat_id = c.id ORDER BY created_at DESC LIMIT 1
-       )
-       WHERE c.user1_id = ? OR c.user2_id = ?
-       ORDER BY COALESCE(m.created_at, c.id) DESC`,
-      [userId, userId, userId]
+    const messages = await db.query(
+      `SELECT sender_id, text, created_at FROM messages 
+       WHERE chat_id = ? 
+       ORDER BY created_at ASC`,
+      [chatId]
     );
 
-    // ✔️ chats is assumed to be an array of rows
+    // Format messages to identify sender
+    const formatted = messages.map(msg => ({
+      text: msg.text,
+      sender: msg.sender_id === userId ? 'you' : 'them',
+      time: msg.created_at
+    }));
+
+    res.json(formatted);
+  } catch (err) {
+    console.error('Error fetching messages:', err);
+    res.status(500).json({ error: 'Failed to fetch messages' });
+  }
+});
+
+
+// Get user contacts
+router.get('/contacts', ensureAuthenticated, async (req, res) => {
+  const userId = req.user.id;
+  try {
+    const chats = await db.query(
+      `SELECT c.id AS chat_id, 
+             u.id AS user_id, u.username, u.fullname, u.avatar, 
+             m.text AS last_message, m.created_at AS last_message_time
+      FROM chats c
+      JOIN users u ON u.id = (CASE WHEN c.user1_id = ? THEN c.user2_id ELSE c.user1_id END)
+      LEFT JOIN messages m ON m.id = (
+        SELECT id FROM messages WHERE chat_id = c.id ORDER BY created_at DESC LIMIT 1
+      )
+      WHERE c.user1_id = ? OR c.user2_id = ?
+      ORDER BY COALESCE(m.created_at, c.id) DESC`
+    , [userId, userId, userId]);
+
     const contacts = chats.map(chat => ({
       id: chat.user_id,
       chatId: chat.chat_id,
@@ -78,6 +103,7 @@ router.get('/contacts', ensureAuthenticated, async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch contacts' });
   }
 });
+
 
 // Send message
 router.post('/send/:toUserId', ensureAuthenticated, async (req, res) => {
@@ -174,7 +200,7 @@ router.post('/request/send', async (req, res) => {
 
 
     // Proceed with your logic, e.g., sending a chat request
-    res.status(200).json({ success: true, message: `Request sent to ${targetUsername}` });
+    res.status(200).json({ success: true, message: Request `sent to ${targetUsername}` });
 
   } catch (err) {
     console.error("Send Request Error:", err);
@@ -189,12 +215,12 @@ router.get('/request/incoming', async (req, res) => {
   try {
     const currentUserId = req.user.id;
 
-    const requests = await db.query(`
-      SELECT cr.id, u.username, u.fullname, u.avatar
+    const requests = await db.query(
+      `SELECT cr.id, u.username, u.fullname, u.avatar
       FROM chat_requests cr
       JOIN users u ON cr.from_user = u.id
-      WHERE cr.to_user = ? AND cr.status = 'pending'
-    `, [currentUserId]);
+      WHERE cr.to_user = ? AND cr.status = 'pending'`
+    , [currentUserId]);
 
     res.json({ success: true, requests });
   } catch (err) {
@@ -252,9 +278,9 @@ router.post('/request/respond', ensureAuthenticated, async (req, res) => {
 
 //   try {
 //     const [[result]] = await db.query(
-//       `SELECT COUNT(*) AS count 
+//       SELECT COUNT(*) AS count 
 //        FROM chat_requests 
-//        WHERE to_user = ? AND status = 'pending'`,
+//        WHERE to_user = ? AND status = 'pending',
 //       [userId]
 //     );
 
