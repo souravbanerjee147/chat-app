@@ -106,34 +106,18 @@ router.get('/contacts', ensureAuthenticated, async (req, res) => {
 
 
 // Send message
-router.post('/send/:toUserId', ensureAuthenticated, async (req, res) => {
+router.post('/send/:chatId', ensureAuthenticated, async (req, res) => {
+  const chatId = parseInt(req.params.chatId, 10);
   const fromUserId = req.user.id;
-  const toUserId = parseInt(req.params.toUserId, 10);
   const { text } = req.body;
 
-  if (!text || isNaN(toUserId)) {
+  // Validate input
+  if (!text || isNaN(chatId)) {
     return res.status(400).json({ success: false, message: 'Invalid input' });
   }
 
   try {
-    const [chatRows] = await db.query(
-      `SELECT * FROM chats 
-       WHERE (user1_id = ? AND user2_id = ?) 
-          OR (user1_id = ? AND user2_id = ?)`,
-      [fromUserId, toUserId, toUserId, fromUserId]
-    );
-
-    let chatId;
-    if (chatRows.length > 0) {
-      chatId = chatRows[0].id;
-    } else {
-      const [insertResult] = await db.query(
-        'INSERT INTO chats (user1_id, user2_id) VALUES (?, ?)',
-        [fromUserId, toUserId]
-      );
-      chatId = insertResult.insertId;
-    }
-
+    // Just insert the message — no need to re-query for the chat
     await db.query(
       'INSERT INTO messages (chat_id, sender_id, text) VALUES (?, ?, ?)',
       [chatId, fromUserId, text]
@@ -145,6 +129,7 @@ router.post('/send/:toUserId', ensureAuthenticated, async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error' });
   }
 });
+
 
 // 🔹 1. Send Chat Request
 router.post('/request/send', async (req, res) => {
@@ -258,7 +243,21 @@ router.post('/request/respond', ensureAuthenticated, async (req, res) => {
 
     if (action === 'accept') {
       await db.query('UPDATE chat_requests SET status = "accepted" WHERE id = ?', [requestId]);
-      await db.query('INSERT INTO chats (user1_id, user2_id) VALUES (?, ?)', [fromUser, toUser]);
+
+      const [existingChat] = await db.query(
+        `SELECT id FROM chats 
+         WHERE (user1_id = ? AND user2_id = ?) 
+            OR (user1_id = ? AND user2_id = ?)`,
+        [fromUser, toUser, toUser, fromUser]
+      );
+
+      // Only insert chat if it doesn't exist
+      if (existingChat.length === 0) {
+        await db.query('INSERT INTO chats (user1_id, user2_id) VALUES (?, ?)', [fromUser, toUser]);
+        console.log('New chat inserted');
+      } else {
+        console.log('Chat already exists, skipping insert');
+      }
       return res.json({ success: true, message: 'Request accepted' });
     } else if (action === 'reject') {
       await db.query('UPDATE chat_requests SET status = "rejected" WHERE id = ?', [requestId]);
