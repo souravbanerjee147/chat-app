@@ -29,7 +29,7 @@ const chatRequestsBtn = document.getElementById('chatRequestsBtn');
 
 // ===== DOM Elements =====
 const overlay = document.getElementById('overlay');
-const allPopups = [settingsPopup, newChatPopup, logoutPopup];
+const allPopups = [settingsPopup, newChatPopup, logoutPopup, requestPopup];
 
 // ===== Chat State =====
 let contacts = [];
