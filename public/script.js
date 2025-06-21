@@ -256,8 +256,8 @@ async function loadIncomingRequests() {
                         </div>
                         <div class="request-fullname">${req.fullname}</div>
                     </div>  `;
-               requestPopup.appendChild(div);
-               console.log("Appending request with id:", req.id);
+                requestPopup.appendChild(div);
+                console.log("Appending request with id:", req.id);
             });
         } else {
             requestPopup.textContent = 'No Request';
@@ -324,7 +324,20 @@ async function loadContacts() {
                     <div class="last-message">${contact.lastMessage}</div>
                 </div>
             `;
-            li.addEventListener('click', () => openChat(contact.id));
+            li.addEventListener('click', () => {
+                openChat(contact.chatId);
+
+                // ✅ Optional: update the chat header too
+                document.getElementById('chatAvatar').src = contact.avatar;
+                document.getElementById('chatName').textContent = contact.fullname;
+
+                // ✅ Show the input form
+                document.getElementById('chatForm').style.display = 'flex';
+
+                // ✅ Clear and focus the message input
+                document.getElementById('messageInput').value = '';
+                document.getElementById('messageInput').focus();
+            });
             contactList.appendChild(li);
         });
     } catch (err) {
@@ -365,5 +378,5 @@ overlay.addEventListener('click', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-  loadContacts();
+    loadContacts();
 });
